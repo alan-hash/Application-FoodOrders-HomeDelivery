@@ -123,7 +123,7 @@ class ClientProfileInfoPage extends StatelessWidget {
       margin: EdgeInsets.only(top: 15),
       child: ListTile(
         leading: Icon(Icons.person),
-        title:Text( '${con.user.value.name ?? ''}  ${con.user.value.lastname ?? ''} '),
+        title:Text( '${con.user.value.name?? ''} ${con.user.value.lastname ?? ''} '),
         subtitle: Text('Nombre del Usuario'),
       ),
     );

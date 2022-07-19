@@ -149,8 +149,6 @@ class RegisterController extends GetxController{
 
   }
 
-
-
   void showAlertDialog(BuildContext context){
     Widget gallaryButton=ElevatedButton(
         onPressed:(){

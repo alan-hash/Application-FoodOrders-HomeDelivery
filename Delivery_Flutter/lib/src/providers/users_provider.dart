@@ -1,3 +1,4 @@
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
@@ -8,7 +9,9 @@ import 'package:delivery_flutter/src/models/user.dart';
 import 'package:get/get.dart';
 
 class UsersProvider extends GetConnect{
+
   String url= Environment.API_URL + 'api/users';
+  User userSession=User.fromJson(GetStorage().read('user')??{});
 
 
   Future<Response>create(User user) async{
@@ -28,7 +31,8 @@ class UsersProvider extends GetConnect{
         '$url/updateWithoutImage',
         user.toJson(),
         headers: {
-          'Content-Type':'application/json'
+          'Content-Type':'application/json',
+          'Authorization':userSession.sessionToken??''
         }
     );
 
@@ -37,8 +41,11 @@ class UsersProvider extends GetConnect{
       return ResponseApi();
     }
 
+    if(response.statusCode==401){
+      Get.snackbar('Error', 'No estas autorizado para realizar esta peticion');
+      return ResponseApi();
+    }
     ResponseApi responseApi=ResponseApi.fromJson(response.body);
-
     return responseApi;
   }
 
@@ -62,6 +69,7 @@ class UsersProvider extends GetConnect{
   Future<Stream> updateWithImage(User user, File image) async {
     Uri uri = Uri.http(Environment.API_URL_OLD, '/api/users/update');
     final request = http.MultipartRequest('PUT', uri);
+    request.headers['Authorization']=userSession.sessionToken ?? '';
     request.files.add(http.MultipartFile(
         'image',
         http.ByteStream(image.openRead().cast()),

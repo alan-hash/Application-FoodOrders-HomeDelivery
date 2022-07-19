@@ -49,7 +49,7 @@ class LoginController extends GetxController{
         }
 
         else { // SOLO UN ROL
-          goToClientProductPage();
+          goToClientHome();
         }
 
       }
@@ -59,8 +59,8 @@ class LoginController extends GetxController{
     }
   }
 
-  void goToClientProductPage(){
-    Get.offNamedUntil('/client/products/list', (route) => false);
+  void goToClientHome(){
+    Get.offNamedUntil('/client/home', (route) => false);
 
   }
 
