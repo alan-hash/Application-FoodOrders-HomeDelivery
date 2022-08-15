@@ -4,8 +4,15 @@ const http = require('http');
 const server = http.createServer(app);
 const logger = require('morgan');
 const cors = require('cors');
-const passport= require('passport');
-const multer=require('multer');
+const passport = require('passport');
+const multer = require('multer');
+const io = require('socket.io')(server);
+
+/*
+* IMPORTAR SOCKETS
+*/
+const ordersSocket = require('./sockets/ordersSocket');
+
 
 
 
@@ -15,6 +22,10 @@ const multer=require('multer');
 const usersRoutes = require('./routes/userRoutes');
 const categoriesRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/productRoutes');
+const addressRoutes = require('./routes/addressRoutes');
+const ordersRoutes = require('./routes/orderRoutes');
+const mercadoPagoRoutes = require('./routes/mercadoPagoRoutes');
+
 
 const port = process.env.PORT || 3000;
 
@@ -38,6 +49,13 @@ app.disable('x-powered-by');
 
 app.set('port', port);
 
+/*
+* LLAMADO A LOS SOCKETS
+*/
+ordersSocket(io);
+
+
+
 const upload= multer({
     storage: multer.memoryStorage()
 
@@ -49,10 +67,13 @@ const upload= multer({
 */
 usersRoutes(app, upload);
 categoriesRoutes(app);
+addressRoutes(app);
 productRoutes(app, upload);
+ordersRoutes(app);
+mercadoPagoRoutes(app);
 
 
-server.listen(3000, '192.168.1.71' || 'localhost', function() {
+server.listen(3000, '192.168.1.73' || 'localhost', function() {
     console.log('Aplicacion de NodeJS ' + port + ' Iniciada...')
 });
 

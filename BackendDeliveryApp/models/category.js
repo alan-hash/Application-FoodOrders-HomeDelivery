@@ -47,7 +47,7 @@ Category.create=(category,result)=>{
         sql,
         [
             category.name,
-            category. description,
+            category.description,
             new Date(),
             new Date(),
 

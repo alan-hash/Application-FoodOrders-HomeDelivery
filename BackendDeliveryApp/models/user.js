@@ -58,6 +58,42 @@ U.id
 
 }
 
+User.findDeliveryMen = (result) =>{
+    const sql = `
+    SELECT
+        CONVERT(U.id, CHAR)AS id,
+        U.email,
+        U.name,
+        U.lastname,
+        U.image,
+        U.phone
+	FROM
+		users AS U
+	INNER JOIN
+		user_has_roles AS UHR
+	ON
+		UHR.id_user = U.id
+	INNER JOIN
+		roles AS R
+	ON
+		R.id = UHR.id_rol
+	WHERE
+		R.id = 2;
+    `;
+
+    db.query(
+        sql,
+        (err, data) => {
+            if (err) {
+                console.log('Error:', err);
+                result(err, null);
+            }
+            else {
+                result(null, data);
+            }
+        }
+    )
+}
 
 User.findByEmail=(email,result) => {
     const sql =`

@@ -7,6 +7,22 @@ const storage=require('../utils/cloud_storage');
 const { use } = require('passport');
 
 module.exports = {
+
+    findDeliveryMen(req, res){
+        User.findDeliveryMen((err,data)=>{
+            if (err) {
+                return res.status(501).json({
+                    success: false,
+                    message: 'Hubo un error al listar a los repartidores',
+                    error: err
+                });
+            }
+
+            return res.status(201).json(data);
+            
+        })
+    },
+
     login(req, res) {
 
         const email = req.body.email;
@@ -15,7 +31,6 @@ module.exports = {
         User.findByEmail(email, async (err, myUser) => {
             
             console.log('Error ', err);
-            console.log('USUARIO ', myUser);
 
             if (err) {
                 return res.status(501).json({
